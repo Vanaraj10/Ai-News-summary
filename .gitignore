@@ -1,2 +1,9 @@
 /venv
-__pychache__
+__pycache__
+*.pyc
+.env
+.vscode/
+*.log
+node_modules/
+.DS_Store
+Thumbs.db

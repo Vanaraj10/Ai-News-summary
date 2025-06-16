@@ -2,3 +2,4 @@ fastapi
 uvicorn
 newspaper3k
 google-generativeai
+python-dotenv

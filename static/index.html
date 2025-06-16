@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI News Summarizer</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <div class="hero-header">
+                    <h1 class="hero-title">
+                        <span class="gradient-text">AI News</span>
+                        <span class="hero-subtitle">Summarizer</span>
+                    </h1>
+                    <p class="hero-description">
+                        Transform lengthy articles into concise, intelligent summaries powered by Google's Gemini AI
+                    </p>
+                </div>
+                
+                <div class="search-container">
+                    <div class="search-box">
+                        <div class="search-input-wrapper">
+                            <svg class="search-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
+                            </svg>
+                            <input 
+                                type="url" 
+                                id="urlInput" 
+                                placeholder="Paste your news article URL here..."
+                                class="search-input"
+                                autocomplete="off"
+                                spellcheck="false"
+                            >
+                        </div>
+                        <button id="summarizeBtn" class="search-btn">
+                            <span class="btn-content">
+                                <svg class="btn-icon" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                                </svg>
+                                <span class="btn-text">Summarize</span>
+                            </span>
+                            <div class="loading-spinner" style="display: none;">
+                                <div class="spinner"></div>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Results Section -->
+        <section class="results" id="resultsSection" style="display: none;">
+            <div class="results-container">
+                <div class="results-header">
+                    <h2 class="results-title" id="articleTitle"></h2>
+                    <div class="sentiment-indicator" id="sentimentBadge"></div>
+                </div>
+
+                <div class="results-content">
+                    <!-- Summary Card -->
+                    <div class="card summary-card">
+                        <div class="card-header">
+                            <svg class="card-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                            </svg>
+                            <h3 class="card-title">Key Summary</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="summary-list" id="summaryContent"></div>
+                        </div>
+                    </div>
+
+                    <!-- Entities Card -->
+                    <div class="card entities-card">
+                        <div class="card-header">
+                            <svg class="card-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
+                            </svg>
+                            <h3 class="card-title">Named Entities</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="entities-grid" id="entitiesContainer"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Error Section -->
+        <section class="error-section" id="errorSection" style="display: none;">
+            <div class="error-card">
+                <div class="error-icon">
+                    <svg width="48" height="48" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.464 0L4.35 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+                    </svg>
+                </div>
+                <h3 class="error-title">Something went wrong</h3>
+                <p class="error-message" id="errorMessage"></p>
+                <button class="error-retry-btn" onclick="hideError()">
+                    <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                    </svg>
+                    Try Again
+                </button>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <p class="footer-text">
+                    Powered by <span class="footer-highlight">Google Gemini AI</span> • 
+                    Built with <span class="footer-highlight">FastAPI</span>
+                </p>
+            </div>
+        </footer>
+    </div>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>
