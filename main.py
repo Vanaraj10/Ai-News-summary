@@ -13,7 +13,7 @@ def read_root():
 def summarize_article(request: ArticleRequest):
     
     try:
-        article_data = scrape_article(request.url)
+        article_data = scrape_article(str(request.url))
         gemini_summary = summarize_with_gemini(article_data["text"])
         return {
             "title": article_data["title"],

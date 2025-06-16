@@ -16,9 +16,9 @@ def summarize_with_gemini(text: str,max_chars:int = 12000) -> str:
 
     Task:
     - Read the article text below
-    - Provide 3-5 bullet point summary (short and informative)
+    - Provide 8 bullet point summary (short and informative)
     - Perform sentiment analysis: positive, neutral, or negative
-    - Extract top 3-5 named entities (people, places, organizations)
+    - Extract top 3 named entities (people, places, organizations)
 
     Article:
     \"\"\"
@@ -34,7 +34,13 @@ def summarize_with_gemini(text: str,max_chars:int = 12000) -> str:
     """
 
     response = model.generate_content(prompt)
+    response_text = response.text.strip()
+    if response_text.startswith("```json"):
+        response_text = response_text[7:]  # Remove ```json
+    if response_text.endswith("```"):
+        response_text = response_text[:-3]  # Remove ```
+    print(f"Gemini API response: {response.text}")
     try:
-        return json.loads(response.text)
+        return json.loads(response_text)
     except Exception:
         raise ValueError("Invalid response format from Gemini API. Expected JSON format.")
