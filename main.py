@@ -28,6 +28,10 @@ async def read_root():
     from fastapi.responses import FileResponse
     return FileResponse('static/index.html')
 
+@app.get("/health")
+async def health_check():
+    return {"status": "ok"}
+
 @app.post("/summarize")
 def summarize_article(request: ArticleRequest):
     
