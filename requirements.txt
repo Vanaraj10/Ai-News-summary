@@ -1,5 +1,10 @@
 fastapi
 uvicorn
-newspaper3k
-google-generativeai
 python-dotenv
+google-generativeai
+beautifulsoup4
+requests
+newspaper3k
+lxml==4.9.3
+lxml_html_clean
+pydantic
